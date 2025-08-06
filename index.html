@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do Pomar à Mesa: A Jornada da Maçã</title>
+    <link rel="icon" href="maca.png">
+    <style>
+        :root {
+            --primary-color: #e53935;
+            --secondary-color: #ffebee;
+            --terminal-bg: #263238;
+            --terminal-text: #ECEFF1;
+            --terminal-prompt: #69F0AE;
+            --terminal-error: #FF5252;
+            --terminal-success: #8BC34A;
+            --terminal-system: #FFD740;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .apple-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .intro {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .intro h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .terminal {
+            background-color: var(--terminal-bg);
+            color: var(--terminal-text);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 30px 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #37474F;
+        }
+        
+        .terminal-title {
+            font-weight: bold;
+            color: #FF7043;
+        }
+        
+        .terminal-controls span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        
+        .close {
+            background-color: var(--terminal-error);
+        }
+        
+        .minimize {
+            background-color: var(--terminal-system);
+        }
+        
+        .maximize {
+            background-color: var(--terminal-success);
+        }
+        
+        .terminal-body {
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        #terminal-output div {
+            margin-bottom: 8px;
+        }
+        
+        .command-line {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .prompt {
+            color: var(--terminal-prompt);
+            margin-right: 10px;
+        }
+        
+        #command-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .site-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .site-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .site-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .site-card a {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .site-card a:hover {
+            background-color: #c62828;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .error-message {
+            color: var(--terminal-error);
+        }
+        
+        .success-message {
+            color: var(--terminal-success);
+        }
+        
+        .system-message {
+            color: var(--terminal-system);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .terminal {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <span class="apple-icon">🍎</span>
+            <h1>Do Pomar à Mesa: A Jornada da Maçã</h1>
+            <p>Tudo sobre a fruta mais versátil e nutritiva!</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="intro">
+            <h2>Conheça a Maçã</h2>
+            <p>A maçã (Malus domestica) é uma das frutas mais cultivadas e consumidas no mundo, com origem na Ásia Central. Existem mais de 7.500 variedades de maçãs, cada uma com características únicas de sabor, textura e uso culinário.</p>
+            
+            <p>Rica em fibras, vitamina C e antioxidantes, a maçã oferece diversos benefícios à saúde, incluindo melhora da digestão, redução do risco de doenças cardiovasculares e controle dos níveis de açúcar no sangue. O ditado "uma maçã por dia mantém o médico longe" tem fundamento científico.</p>
+            
+            <p>No Brasil, a produção concentra-se principalmente no Sul, com destaque para Santa Catarina e Rio Grande do Sul. A colheita ocorre entre janeiro e abril na maioria das variedades.</p>
+        </div>
+        
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-title">Terminal de Navegação - Maçãs</div>
+                <div class="terminal-controls">
+                    <span class="close"></span>
+                    <span class="minimize"></span>
+                    <span class="maximize"></span>
+                </div>
+            </div>
+            <div class="terminal-body" id="terminal-output">
+                <div class="system-message">Bem-vindo ao Terminal de Navegação sobre Maçãs!</div>
+                <div class="system-message">Digite um dos seguintes comandos para acessar informações:</div>
+                <br>
+                <div>- <strong>cultivo</strong>: Técnicas de cultivo de maçãs</div>
+                <div>- <strong>receitas</strong>: Receitas com maçãs</div>
+                <div>- <strong>beneficios</strong>: Benefícios para a saúde</div>
+                <div>- <strong>variedades</strong>: Principais variedades de maçã</div>
+                <div>- <strong>limpar</strong>: Limpa o terminal</div>
+                <div>- <strong>ajuda</strong>: Mostra esta mensagem de ajuda</div>
+                <br>
+                <div>Exemplo: <span class="prompt">></span> receitas</div>
+            </div>
+            <div class="command-line">
+                <span class="prompt">></span>
+                <input type="text" id="command-input" placeholder="Digite um comando e pressione Enter" autofocus>
+            </div>
+        </div>
+        
+        <div class="site-card" id="cultivo-card">
+            <h3>Técnicas de Cultivo de Maçãs</h3>
+            <p>O cultivo de maçãs requer condições climáticas específicas, com invernos frios para quebra de dormência das gemas. As macieiras precisam de sol pleno, solo bem drenado e proteção contra ventos fortes.</p>
+            <p>Principais técnicas: poda de formação e frutificação, raleio de frutos, controle integrado de pragas, polinização dirigida e irrigação por gotejamento. O espaçamento entre plantas varia conforme o porta-enxerto utilizado.</p>
+            <a href="#" target="_blank">Manual de Pomologia</a>
+        </div>
+        
+        <div class="site-card" id="receitas-card">
+            <h3>Receitas com Maçãs</h3>
+            <p>Descubra receitas deliciosas para aproveitar as maçãs na culinária:</p>
+            <p><strong>Sobremesas:</strong> Torta de maçã, strudel, crumble, maçã do amor<br>
+               <strong>Salgados:</strong> Frango com maçã, salada Waldorf, purê de maçã e batata<br>
+               <strong>Bebidas:</strong> Suco de maçã, sidra, smoothies</p>
+            <p>Dica: maçãs ácidas são melhores para cozinhar, enquanto as doces são ideais para consumo in natura.</p>
+            <a href="#" target="_blank">Livro de Receitas com Maçãs</a>
+        </div>
+        
+        <div class="site-card" id="beneficios-card">
+            <h3>Benefícios da Maçã para a Saúde</h3>
+            <p>As maçãs são verdadeiras aliadas da saúde, oferecendo diversos benefícios:</p>
+            <ul>
+                <li>Rica em fibras (especialmente na casca)</li>
+                <li>Fonte de vitamina C e potássio</li>
+                <li>Contém quercetina, um potente antioxidante</li>
+                <li>Ajuda no controle do colesterol</li>
+                <li>Promove saúde bucal</li>
+                <li>Pode reduzir risco de diabetes tipo 2</li>
+            </ul>
+            <a href="#" target="_blank">Estudos Científicos</a>
+        </div>
+        
+        <div class="site-card" id="variedades-card">
+            <h3>Variedades de Maçã</h3>
+            <p>Conheça as principais variedades de maçã cultivadas no Brasil e no mundo:</p>
+            <p><strong>Vermelhas:</strong> Gala, Fuji, Red Delicious<br>
+               <strong>Verdes:</strong> Granny Smith<br>
+               <strong>Amarelas:</strong> Golden Delicious<br>
+               <strong>Rústicas:</strong> Maçã-verde, Maçã-da-terra</p>
+            <p>Cada variedade tem características próprias de sabor (doce, ácido, equilibrado), textura (firme, macia) e melhor uso (consumo in natura, culinária, sucos).</p>
+            <a href="#" target="_blank">Guia de Variedades</a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Do Pomar à Mesa: A Jornada da Maçã | Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Comandos disponíveis
+        const commands = {
+            'cultivo': {
+                card: 'cultivo-card',
+                message: '<div class="system-message">Carregando informações sobre cultivo de maçãs...</div>'
+            },
+            'receitas': {
+                card: 'receitas-card',
+                message: '<div class="system-message">Abrindo receitas deliciosas com maçãs...</div>'
+            },
+            'beneficios': {
+                card: 'beneficios-card',
+                message: '<div class="system-message">Mostrando benefícios da maçã para saúde...</div>'
+            },
+            'variedades': {
+                card: 'variedades-card',
+                message: '<div class="system-message">Exibindo diferentes variedades de maçã...</div>'
+            },
+            'limpar': {
+                action: function() {
+                    document.getElementById('terminal-output').innerHTML = '';
+                    addTerminalOutput('<div class="system-message">Terminal limpo. Digite um comando para continuar.</div>');
+                }
+            },
+            'ajuda': {
+                action: function() {
+                    addTerminalOutput('<div class="system-message">Comandos disponíveis:</div>');
+                    addTerminalOutput('<div>- cultivo: Técnicas de cultivo</div>');
+                    addTerminalOutput('<div>- receitas: Receitas com maçãs</div>');
+                    addTerminalOutput('<div>- beneficios: Benefícios para saúde</div>');
+                    addTerminalOutput('<div>- variedades: Variedades de maçã</div>');
+                    addTerminalOutput('<div>- limpar: Limpa o terminal</div>');
+                    addTerminalOutput('<div>- ajuda: Mostra esta mensagem</div>');
+                }
+            }
+        };
+
+        // Configurar o input de comando
+        const commandInput = document.getElementById('command-input');
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        commandInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim();
+                this.value = '';
+                
+                if (command) {
+                    processCommand(command);
+                }
+            }
+        });
+
+        // Suporte para histórico de comandos
+        commandInput.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (commandHistory.length === 0) return;
+                if (historyIndex > 0) historyIndex--;
+                this.value = commandHistory[historyIndex];
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (commandHistory.length === 0) return;
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    this.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    this.value = '';
+                }
+            }
+        });
+
+        function addToHistory(command) {
+            if (command && (!commandHistory.length || commandHistory[commandHistory.length - 1] !== command)) {
+                commandHistory.push(command);
+            }
+            historyIndex = commandHistory.length;
+        }
+
+        function processCommand(command) {
+            addToHistory(command);
+            displayCommand(command);
+            
+            const normalizedCmd = command.toLowerCase();
+            
+            if (commands[normalizedCmd]) {
+                if (commands[normalizedCmd].card) {
+                    // Esconder todos os cards primeiro
+                    document.querySelectorAll('.site-card').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    
+                    // Mostrar mensagem no terminal
+                    addTerminalOutput(commands[normalizedCmd].message);
+                    
+                    // Mostrar o card correspondente
+                    const card = document.getElementById(commands[normalizedCmd].card);
+                    if (card) {
+                        card.classList.add('active');
+                        card.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else if (commands[normalizedCmd].action) {
+                    commands[normalizedCmd].action();
+                }
+            } else {
+                addTerminalOutput(`<div class="error-message">Comando não reconhecido: "${command}". Digite "ajuda" para ver os comandos disponíveis.</div>`);
+            }
+        }
+
+        function displayCommand(command) {
+            addTerminalOutput(`<div class="command-line"><span class="prompt">></span> ${command}</div>`);
+        }
+
+        function addTerminalOutput(text) {
+            const terminalOutput = document.getElementById('terminal-output');
+            const newElement = document.createElement('div');
+            newElement.innerHTML = text;
+            terminalOutput.appendChild(newElement);
+            
+            // Limita o número de linhas
+            const maxLines = 100;
+            const lines = terminalOutput.children;
+            if (lines.length > maxLines) {
+                terminalOutput.removeChild(lines[0]);
+            }
+            
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        // Focar no input quando a página carregar
+        window.onload = function() {
+            commandInput.focus();
+        };
+    </script>
+</body>
+</html>
